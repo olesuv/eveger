@@ -19,4 +19,12 @@ export class EventService {
     const newEvent = this.eventRepository.create(createEventDto);
     return this.eventRepository.save(newEvent);
   }
+
+  async checkDate(createEventDto: CreateEventDTO): Promise<Boolean> {
+    const same = await this.eventRepository.findBy({
+      date: createEventDto.date,
+    });
+
+    return same.length > 0;
+  }
 }
