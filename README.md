@@ -1,2 +1,1 @@
-# eveger
-simple event manager (eveger)
+## eveger - simple event manager
