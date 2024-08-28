@@ -6,7 +6,8 @@ async function bootstrap() {
   require('dotenv').config();
   const port = serverPort();
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
+
   await app.listen(port, () => {
     console.log(`server started on http://localhost:${port}`);
   });
