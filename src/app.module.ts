@@ -5,13 +5,15 @@ import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
 import { User } from './models/user.entity';
 
+import { dbString, devMode } from 'utils/processEnv';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: process.env.DB,
+      url: dbString(),
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: process.env.MODE ? true : false, // dev mode only
+      synchronize: devMode(), // dev mode only
     }),
     TypeOrmModule.forFeature([User]),
   ],
