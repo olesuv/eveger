@@ -1,20 +1,13 @@
-'use client';
-
 import Navbar from './components/Navbvar';
-import { ThemeProvider } from '@mui/material';
-import theme from './theme';
+import RecentEvents from './components/RecentEvents';
 
-function Home({
-  Component,
-  pageProps,
-}: {
-  Component: React.ComponentType;
-  pageProps: any;
-}) {
+export default function Home() {
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Navbar />
-      <Component {...pageProps} />
-    </ThemeProvider>
+      <main>
+        <RecentEvents />
+      </main>
+    </>
   );
 }
