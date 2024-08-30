@@ -13,11 +13,34 @@ import {
   TextField,
   Box,
   Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
 } from '@mui/material';
-import Navbar from '@/app/components/Navbvar';
+import Navbar from '../../components/Navbvar';
+
+interface CurrentEvent {
+  uuid: string;
+  title: string;
+  description: string | null;
+  category: string;
+  membersAmount: number;
+  location: string;
+  date: string;
+}
 
 export default function Event({ params }: { params: { eventUuid: string } }) {
-  const [event, setEvent] = useState<any>(null);
+  const [event, setEvent] = useState<CurrentEvent>({
+    uuid: '',
+    title: '',
+    description: '',
+    category: '',
+    membersAmount: 0,
+    location: '',
+    date: '',
+  });
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -38,6 +61,14 @@ export default function Event({ params }: { params: { eventUuid: string } }) {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEvent({ ...event, [e.target.name]: e.target.value });
+  };
+
+  const handleSelectChange = (e: SelectChangeEvent<string>) => {
+    const { name, value } = e.target;
+    setEvent({
+      ...event,
+      [name as string]: value as string,
+    });
   };
 
   const handleSave = async () => {
@@ -105,14 +136,24 @@ export default function Event({ params }: { params: { eventUuid: string } }) {
                     multiline
                     rows={4}
                   />
-                  <TextField
-                    label="Category"
-                    name="category"
-                    value={event.category}
-                    onChange={handleInputChange}
-                    fullWidth
-                    margin="normal"
-                  />
+                  <FormControl fullWidth margin="normal" required>
+                    <InputLabel id="category-label">Category</InputLabel>
+                    <Select
+                      labelId="category-label"
+                      id="category"
+                      name="category"
+                      value={event.category}
+                      label="Category"
+                      onChange={handleSelectChange}
+                    >
+                      <MenuItem value="movie">Movie</MenuItem>
+                      <MenuItem value="gaming">Gaming</MenuItem>
+                      <MenuItem value="books">Books</MenuItem>
+                      <MenuItem value="english club">English Club</MenuItem>
+                      {/* FIX: other category problem */}
+                      <MenuItem value="other">Other</MenuItem>
+                    </Select>
+                  </FormControl>
                   <TextField
                     label="Members Amount"
                     name="membersAmount"

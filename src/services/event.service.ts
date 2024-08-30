@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Event } from 'src/models/event.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEventDTO } from 'src/dto/event.dto';
+import { PassThrough } from 'stream';
 
 @Injectable()
 export class EventService {
@@ -60,5 +61,15 @@ export class EventService {
     }
 
     return await query.getMany();
+  }
+
+  async updateEvent(uuid: string, newUserEvent: Event): Promise<Event> {
+    let eventToUpdate = await this.eventRepository.findOneBy({ uuid: uuid });
+    if (!eventToUpdate) {
+      throw new NotFoundException('Event not found');
+    }
+
+    eventToUpdate = newUserEvent;
+    return await this.eventRepository.save(eventToUpdate);
   }
 }
