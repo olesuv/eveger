@@ -20,10 +20,15 @@ export default class EventErrorHandler {
     if (
       eventDto.category &&
       eventDto.category !==
-        ('movie' || 'gaming' || 'books' || 'english club' || 'other')
+        (EventCategory.BOOKS ||
+          EventCategory.ENG_CLUB ||
+          EventCategory.GAMING ||
+          EventCategory.MOVIE ||
+          EventCategory.OTHER)
     ) {
-      //format error message
-      return Error(`use only supported event categories: ${EventCategory}`);
+      return Error(
+        `use only supported event categories: 'movie', 'gaming', 'books', 'english club', 'other'`,
+      );
     }
 
     if (eventDto.membersAmount > 250) {

@@ -19,12 +19,12 @@ export default function RecentEvents() {
       })
       .catch((err) => {
         console.error(err);
-        setError('Failed to fetch events');
+        setError('failed to fetch events');
       });
   }, []);
 
   if (error) {
-    return <div>{error}</div>;
+    return <div>Some API error occured: {error}</div>;
   }
 
   return (
@@ -69,12 +69,11 @@ export default function RecentEvents() {
 
 async function fetchRecentEvents() {
   return await axios
-    .get(`${process.env.NEXT_PUBLIC_API_LINK}/events`)
+    .get(`${process.env.NEXT_PUBLIC_API_LINK}/events`, { params: { limit: 5 } })
     .then(function (response) {
       return response.data;
     })
     .catch(function (error) {
-      console.log(error);
       throw error;
     });
 }
