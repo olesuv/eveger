@@ -67,7 +67,10 @@ export default function Map() {
                 key={index}
                 position={event.location as [number, number]} // Ensure this is of the correct type
               >
-                <Popup>{event.title}</Popup>
+                <Popup>
+                  Event with name{' '}
+                  <a href={`/events/${event.uuid}`}>'{event.title}'</a>
+                </Popup>
               </Marker>
             ))}
           </MapContainer>

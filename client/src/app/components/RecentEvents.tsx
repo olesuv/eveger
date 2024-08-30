@@ -7,6 +7,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import Link from 'next/link'; // Import the Link component from Next.js
 
 export default function RecentEvents() {
   const [events, setEvents] = useState([]);
@@ -31,7 +32,7 @@ export default function RecentEvents() {
     <Container maxWidth="xl">
       <Box sx={{ mt: 4, mb: 4 }}>
         <Typography variant="h4" gutterBottom>
-          The most recent events
+          Upcoming events
         </Typography>
 
         <Grid container spacing={2}>
@@ -39,7 +40,11 @@ export default function RecentEvents() {
             <Grid item xs={12} sm={6} md={4} key={event.uuid}>
               <Paper elevation={3} style={{ padding: '16px' }}>
                 <Box mb={2}>
-                  <Typography variant="h6">{event.title}</Typography>
+                  <Typography variant="h6">
+                    <Link href={`/events/${event.uuid}`} passHref>
+                      {event.title}
+                    </Link>
+                  </Typography>
                   <Typography variant="body2" color="textSecondary">
                     {event.category}
                   </Typography>
@@ -69,7 +74,9 @@ export default function RecentEvents() {
 
 async function fetchRecentEvents() {
   return await axios
-    .get(`${process.env.NEXT_PUBLIC_API_LINK}/events`, { params: { limit: 5 } })
+    .get(`${process.env.NEXT_PUBLIC_API_LINK}/events`, {
+      params: { recent: 'true', amount: 10 },
+    })
     .then(function (response) {
       return response.data;
     })

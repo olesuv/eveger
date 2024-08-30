@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Event } from 'src/models/event.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,5 +26,39 @@ export class EventService {
     });
 
     return same.length > 0;
+  }
+
+  async getEvent(eventId: string): Promise<Event> {
+    const event = await this.eventRepository.findOneBy({ uuid: eventId });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    return event;
+  }
+
+  async getEvents(
+    amount?: number,
+    filterBy?: string,
+    sortBy?: string,
+    recent?: string,
+  ): Promise<Event[]> {
+    let query = this.eventRepository.createQueryBuilder('event');
+
+    if (recent === ('true' || 'True')) {
+      const today = new Date();
+      query = query.where('event.date >= :today', { today });
+    }
+
+    if (filterBy) {
+      query = query.where('event.someField = :filterBy', { filterBy });
+    }
+
+    query = query.orderBy(sortBy ? `event.${sortBy}` : 'event.date', 'ASC');
+
+    if (amount) {
+      query = query.limit(amount);
+    }
+
+    return await query.getMany();
   }
 }

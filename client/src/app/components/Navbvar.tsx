@@ -11,11 +11,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import NextLink from 'next/link';
 
 const pages = ['Recent events', 'Explore new', 'Create event'];
+const pagesLinks = ['/', '/', '/events/new-event'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function Navbar() {
@@ -50,7 +53,7 @@ export default function Navbar() {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -118,14 +121,16 @@ export default function Navbar() {
             Eveger
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
+            {pages.map((page, index) => (
+              <Link
                 key={page}
-                onClick={handleCloseNavMenu}
+                component={NextLink}
+                href={pagesLinks[index]}
+                underline="none"
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
-              </Button>
+                <Button sx={{ color: 'inherit' }}>{page}</Button>
+              </Link>
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
