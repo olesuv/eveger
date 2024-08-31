@@ -60,7 +60,7 @@ export default function NewEvent() {
     e.preventDefault();
     try {
       const result = await createNewEvent(event);
-      router.push(`${process.env.NEXT_PUBLIC_API_LINK}/events`);
+      router.push(`http://localhost:3000/`);
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.message || 'An unexpected error occurred';

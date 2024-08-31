@@ -3,7 +3,8 @@ import { Repository } from 'typeorm';
 import { Event } from 'src/models/event.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEventDTO } from 'src/dto/event.dto';
-import { PassThrough } from 'stream';
+import { decodeLocation } from 'src/utils/location';
+import * as geolib from 'geolib';
 
 @Injectable()
 export class EventService {
@@ -42,12 +43,17 @@ export class EventService {
     filterBy?: string,
     sortBy?: string,
     recent?: string,
+    category?: string,
   ): Promise<Event[]> {
     let query = this.eventRepository.createQueryBuilder('event');
 
-    if (recent === ('true' || 'True')) {
+    if (category) {
+      query = query.where('event.category = :category', { category });
+    }
+
+    if (recent === 'true' || recent === 'True') {
       const today = new Date();
-      query = query.where('event.date >= :today', { today });
+      query = query.andWhere('event.date >= :today', { today });
     }
 
     if (filterBy) {

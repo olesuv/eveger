@@ -89,6 +89,7 @@ export class EventController {
     @Query('sortBy') sortBy?: string,
     @Query('filterBy') filterBy?: string,
     @Query('recent') recent?: string,
+    @Query('category') category?: string,
   ) {
     try {
       const recentEvents = await this.eventService.getEvents(
@@ -96,6 +97,7 @@ export class EventController {
         filterBy,
         sortBy,
         recent,
+        category,
       );
 
       if (!recentEvents || recentEvents.length === 0) {
@@ -115,7 +117,7 @@ export class EventController {
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: 'database error',
-          message: 'an error occurred while accessing the database',
+          message: `an error occurred while accessing the database: ${error}`,
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

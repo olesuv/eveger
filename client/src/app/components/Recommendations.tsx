@@ -21,8 +21,10 @@ export default function Recs(props: IRecsProps) {
   const [events, setEvents] = useState([]);
   const [error, setError] = useState('');
 
+  console.log(props.eventCategory);
+
   useEffect(() => {
-    fetchRecentEvents(props.eventCategory)
+    fetchRecsEvents(props.eventCategory)
       .then((data) => {
         setEvents(data);
       })
@@ -93,10 +95,10 @@ export default function Recs(props: IRecsProps) {
   );
 }
 
-async function fetchRecentEvents(category: string) {
+async function fetchRecsEvents(eventCategory: string) {
   return await axios
     .get(`${process.env.NEXT_PUBLIC_API_LINK}/events`, {
-      params: { recent: 'true', amount: 10, filterBy: category },
+      params: { category: eventCategory, recent: 'true', amount: 6 },
     })
     .then(function (response) {
       return response.data;

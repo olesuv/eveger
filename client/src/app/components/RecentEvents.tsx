@@ -92,7 +92,7 @@ export default function RecentEvents() {
 async function fetchRecentEvents() {
   return await axios
     .get(`${process.env.NEXT_PUBLIC_API_LINK}/events`, {
-      params: { recent: 'true', amount: 10 },
+      params: { recent: 'true', amount: 9 },
     })
     .then(function (response) {
       return response.data;
