@@ -1,10 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UserController } from './controllers/user.controller';
-import { UserService } from './services/user.service';
-import { User } from './models/user.entity';
-
 import { EventController } from './controllers/event.controller';
 import { EventService } from './services/event.service';
 import { Event } from './models/event.entity';
@@ -19,10 +15,10 @@ import { dbString, devMode } from 'src/utils/processEnv';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: devMode(), // dev mode only
     }),
-    TypeOrmModule.forFeature([Event, User]),
+    TypeOrmModule.forFeature([Event]),
   ],
 
-  controllers: [UserController, EventController],
-  providers: [UserService, EventService],
+  controllers: [EventController],
+  providers: [EventService],
 })
 export class AppModule {}
