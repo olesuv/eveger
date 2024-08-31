@@ -7,7 +7,9 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Link from 'next/link'; // Import the Link component from Next.js
+import Link from 'next/link';
+import { CircularProgress } from '@mui/material';
+import { formatDate } from '../utils/utils';
 
 export default function RecentEvents() {
   const [events, setEvents] = useState([]);
@@ -26,6 +28,21 @@ export default function RecentEvents() {
 
   if (error) {
     return <div>Some API error occured: {error}</div>;
+  }
+
+  if (!events) {
+    return (
+      <Container maxWidth="sm">
+        <Grid
+          container
+          justifyContent="center"
+          alignItems="center"
+          style={{ minHeight: '100vh' }}
+        >
+          <CircularProgress />
+        </Grid>
+      </Container>
+    );
   }
 
   return (
@@ -83,16 +100,4 @@ async function fetchRecentEvents() {
     .catch(function (error) {
       throw error;
     });
-}
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-
-  return date.toLocaleString('eng', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
 }

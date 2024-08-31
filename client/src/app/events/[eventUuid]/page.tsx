@@ -20,6 +20,7 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 import Navbar from '../../components/Navbvar';
+import Recs from '@/app/components/Recommendations';
 
 interface CurrentEvent {
   uuid: string;
@@ -114,6 +115,10 @@ export default function Event({ params }: { params: { eventUuid: string } }) {
       {/* TODO: make it more correct */}
       <Container maxWidth="xl">
         <Box sx={{ mt: 4, mb: 4 }}>
+          <Typography variant="h4" gutterBottom>
+            Current event
+          </Typography>
+
           <Card>
             <CardContent>
               {isEditing ? (
@@ -150,7 +155,6 @@ export default function Event({ params }: { params: { eventUuid: string } }) {
                       <MenuItem value="gaming">Gaming</MenuItem>
                       <MenuItem value="books">Books</MenuItem>
                       <MenuItem value="english club">English Club</MenuItem>
-                      {/* FIX: other category problem */}
                       <MenuItem value="other">Other</MenuItem>
                     </Select>
                   </FormControl>
@@ -230,6 +234,8 @@ export default function Event({ params }: { params: { eventUuid: string } }) {
               )}
             </CardContent>
           </Card>
+
+          <Recs eventCategory={event.category} />
         </Box>
       </Container>
     </main>
