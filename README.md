@@ -1,6 +1,10 @@
 ## eveger - simple event manager
 
-Event manager with using Material UI with Next JS, Nest JS
+Event manager with using Material UI with Next JS, Nest JS.
+
+- no auth
+- no refactor
+- no algorithm (bug)
 
 ## installation
 
@@ -18,7 +22,3 @@ cd client && npm run dev & cd .. && nest start
 
 Main folder: backed app (controllers, models, ect.)
 client folder: all client code.
-
-## algorithm
-
-Not wokring for now, fixing bug with category filtering
