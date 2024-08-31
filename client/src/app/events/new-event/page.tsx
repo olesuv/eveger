@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import Navbar from '../../components/Navbvar';
+import { useRouter } from 'next/navigation';
 import {
   TextField,
   Button,
@@ -35,6 +36,7 @@ export default function NewEvent() {
     location: '',
     date: '',
   });
+  const router = useRouter();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>,
@@ -58,7 +60,7 @@ export default function NewEvent() {
     e.preventDefault();
     try {
       const result = await createNewEvent(event);
-      console.log(result);
+      router.push(`${process.env.NEXT_PUBLIC_API_LINK}/events`);
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.message || 'An unexpected error occurred';
@@ -118,7 +120,6 @@ export default function NewEvent() {
                 <MenuItem value="gaming">Gaming</MenuItem>
                 <MenuItem value="books">Books</MenuItem>
                 <MenuItem value="english club">English Club</MenuItem>
-                {/* FIX: other category problem */}
                 <MenuItem value="other">Other</MenuItem>
               </Select>
             </FormControl>
