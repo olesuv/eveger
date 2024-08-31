@@ -18,13 +18,13 @@ export default class EventErrorHandler {
     }
 
     if (
-      eventDto.category &&
-      eventDto.category !==
-        (EventCategory.BOOKS ||
-          EventCategory.ENG_CLUB ||
-          EventCategory.GAMING ||
-          EventCategory.MOVIE ||
-          EventCategory.OTHER)
+      ![
+        EventCategory.BOOKS,
+        EventCategory.ENG_CLUB,
+        EventCategory.GAMING,
+        EventCategory.MOVIE,
+        EventCategory.OTHER,
+      ].includes(eventDto.category)
     ) {
       return Error(
         `use only supported event categories: 'movie', 'gaming', 'books', 'english club', 'other'`,
