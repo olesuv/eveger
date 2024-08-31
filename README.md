@@ -2,17 +2,17 @@
 
 Event manager with using Material UI with Next JS, Nest JS
 
-## Installation
+## installation
 
 ```shell
 cd client; npm i; cd ..; npm i
 ```
 
-## Architecture
+## architecture
 
 Main folder: backed app (controllers, models, ect.)
 client folder: all client code.
 
-## Algorithm
+## algorithm
 
 Not wokring for now, fixing bug with category filtering
