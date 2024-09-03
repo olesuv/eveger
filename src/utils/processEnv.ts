@@ -22,7 +22,7 @@ export function serverPort(): number {
   const port = process.env.PORT;
 
   if (!port) {
-    return 3000;
+    return 8080;
   }
 
   return Number(port);

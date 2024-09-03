@@ -13,7 +13,7 @@ import { dbString, devMode } from 'src/utils/processEnv';
       type: 'postgres',
       url: dbString(),
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: devMode(), // dev mode only
+      synchronize: devMode(), // dev option for migrating
     }),
     TypeOrmModule.forFeature([Event]),
   ],
