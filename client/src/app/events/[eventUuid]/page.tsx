@@ -53,6 +53,7 @@ export default function Event({ params }: { params: { eventUuid: string } }) {
         );
         setEvent(response.data);
       } catch (err) {
+        console.error('Error fetching event:', err);
         setError('Failed to fetch event');
       }
     }
@@ -93,7 +94,7 @@ export default function Event({ params }: { params: { eventUuid: string } }) {
     );
   }
 
-  if (!event) {
+  if (!event.uuid) {
     return (
       <Container maxWidth="sm">
         <Grid
@@ -235,7 +236,7 @@ export default function Event({ params }: { params: { eventUuid: string } }) {
             </CardContent>
           </Card>
 
-          <Recs eventCategory={event.category} />
+          <Recs eventUUID={event.uuid} />
         </Box>
       </Container>
     </main>

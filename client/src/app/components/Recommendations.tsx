@@ -14,31 +14,32 @@ import { formatDate } from '../utils/utils';
 import axios from 'axios';
 
 interface IRecsProps {
-  eventCategory: string;
+  eventUUID: string;
 }
 
 export default function Recs(props: IRecsProps) {
   const [events, setEvents] = useState([]);
   const [error, setError] = useState('');
 
-  console.log(props.eventCategory);
-
   useEffect(() => {
-    fetchRecsEvents(props.eventCategory)
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchRecsEvents(props.eventUUID);
         setEvents(data);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error(err);
         setError('failed to fetch events');
-      });
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [props.eventUUID]);
 
   if (error) {
     return <div>Some API error occured: {error}</div>;
   }
 
-  if (!events) {
+  if (events.length === 0) {
     return (
       <Container maxWidth="sm">
         <Grid
@@ -56,7 +57,7 @@ export default function Recs(props: IRecsProps) {
   return (
     <main>
       <Typography variant="h4" gutterBottom>
-        Recomendations based on current event
+        Recommendations based on current event
       </Typography>
 
       <Grid container spacing={2}>
@@ -95,11 +96,9 @@ export default function Recs(props: IRecsProps) {
   );
 }
 
-async function fetchRecsEvents(eventCategory: string) {
+async function fetchRecsEvents(eventUUID: string) {
   return await axios
-    .get(`${process.env.NEXT_PUBLIC_API_LINK}/events`, {
-      params: { category: eventCategory, recent: 'true', amount: 6 },
-    })
+    .get(`${process.env.NEXT_PUBLIC_API_LINK}/recs/${eventUUID}`)
     .then(function (response) {
       return response.data;
     })
