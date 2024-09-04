@@ -6,6 +6,7 @@ import { EventService } from './services/event.service';
 import { Event } from './models/event.entity';
 
 import { dbString, devMode } from 'src/utils/processEnv';
+import { RecsController } from './controllers/event.recs.controller';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { dbString, devMode } from 'src/utils/processEnv';
     TypeOrmModule.forFeature([Event]),
   ],
 
-  controllers: [EventController],
+  controllers: [EventController, RecsController],
   providers: [EventService],
 })
 export class AppModule {}
