@@ -11,14 +11,15 @@ import {
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { formatDate } from '../utils/utils';
-import axios from 'axios';
+import { IEvent } from '../types/event';
+import { fetchRecsEvents } from '../utils/fetching-events';
 
 interface IRecsProps {
   eventUUID: string;
 }
 
 export default function Recs(props: IRecsProps) {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<IEvent[]>([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -94,15 +95,4 @@ export default function Recs(props: IRecsProps) {
       </Grid>
     </main>
   );
-}
-
-async function fetchRecsEvents(eventUUID: string) {
-  return await axios
-    .get(`${process.env.NEXT_PUBLIC_API_LINK}/recs/${eventUUID}`)
-    .then(function (response) {
-      return response.data;
-    })
-    .catch(function (error) {
-      throw error;
-    });
 }

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -10,9 +9,12 @@ import Container from '@mui/material/Container';
 import Link from 'next/link';
 import { CircularProgress } from '@mui/material';
 import { formatDate } from '../utils/utils';
+import ApiError from '../utils/ui/ApiError';
+import { IEvent } from '../types/event';
+import { fetchRecentEvents } from '../utils/fetching-events';
 
 export default function RecentEvents() {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<IEvent[]>([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -21,13 +23,12 @@ export default function RecentEvents() {
         setEvents(data);
       })
       .catch((err) => {
-        console.error(err);
-        setError('failed to fetch events');
+        setError(`failed to fetch events: ${err}`);
       });
   }, []);
 
   if (error) {
-    return <div>Some API error occured: {error}</div>;
+    return <ApiError error={error} />;
   }
 
   if (!events) {
@@ -87,17 +88,4 @@ export default function RecentEvents() {
       </Box>
     </Container>
   );
-}
-
-async function fetchRecentEvents() {
-  return await axios
-    .get(`${process.env.NEXT_PUBLIC_API_LINK}/events`, {
-      params: { recent: 'true', amount: 9 },
-    })
-    .then(function (response) {
-      return response.data;
-    })
-    .catch(function (error) {
-      throw error;
-    });
 }

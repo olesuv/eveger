@@ -12,6 +12,7 @@ import { fetchEvents } from '../utils/fetching-events';
 import L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
+import ApiError from '../utils/ui/ApiError';
 
 export default function Map() {
   const [events, setEvents] = useState<IEvent[]>([]);
@@ -40,8 +41,7 @@ export default function Map() {
           setEvents(eventsWithCoordinates);
         }
       } catch (err) {
-        console.error(err);
-        setError('failed to fetch events');
+        setError(`failed to fetch events: ${err}`);
       }
     }
 
@@ -49,8 +49,7 @@ export default function Map() {
   }, []);
 
   if (error) {
-    console.error(error);
-    return <div>some API error occurred: {error}</div>;
+    return <ApiError error={error} />;
   }
 
   return (

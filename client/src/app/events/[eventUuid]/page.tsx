@@ -6,9 +6,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
-  CircularProgress,
-  Alert,
   Container,
   TextField,
   Box,
@@ -21,19 +18,13 @@ import {
 } from '@mui/material';
 import Navbar from '../../components/Navbvar';
 import Recs from '@/app/components/Recommendations';
-
-interface CurrentEvent {
-  uuid: string;
-  title: string;
-  description: string | null;
-  category: string;
-  membersAmount: number;
-  location: string;
-  date: string;
-}
+import ApiError from '@/app/utils/ui/ApiError';
+import LoadingBar from '@/app/utils/ui/Loading';
+import { IEvent } from '@/app/types/event';
+import { fetchEvent } from '@/app/utils/fetching-events';
 
 export default function Event({ params }: { params: { eventUuid: string } }) {
-  const [event, setEvent] = useState<CurrentEvent>({
+  const [event, setEvent] = useState<IEvent>({
     uuid: '',
     title: '',
     description: '',
@@ -46,19 +37,18 @@ export default function Event({ params }: { params: { eventUuid: string } }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   useEffect(() => {
-    async function fetchEvent() {
+    async function loadEvent() {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_LINK}/events/${params.eventUuid}`,
-        );
-        setEvent(response.data);
+        const event = await fetchEvent(params.eventUuid);
+        if (event) {
+          setEvent(event);
+        }
       } catch (err) {
-        console.error('Error fetching event:', err);
-        setError('Failed to fetch event');
+        setError(`failed to fetch event: ${err}`);
       }
     }
 
-    fetchEvent();
+    loadEvent();
   }, [params.eventUuid]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,26 +77,11 @@ export default function Event({ params }: { params: { eventUuid: string } }) {
   };
 
   if (error) {
-    return (
-      <Container maxWidth="sm">
-        <Alert severity="error">{error}</Alert>
-      </Container>
-    );
+    return <ApiError error={error} />;
   }
 
   if (!event.uuid) {
-    return (
-      <Container maxWidth="sm">
-        <Grid
-          container
-          justifyContent="center"
-          alignItems="center"
-          style={{ minHeight: '100vh' }}
-        >
-          <CircularProgress />
-        </Grid>
-      </Container>
-    );
+    return <LoadingBar />;
   }
 
   return (
