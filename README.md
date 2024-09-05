@@ -3,8 +3,7 @@
 Event manager with using Material UI with Next JS, Nest JS.
 
 - no auth
-- no refactor
-- no algorithm (bug)
+- no refactor (in progress)
 
 ## installation
 
