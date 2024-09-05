@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { formatDate } from '../utils/utils';
 import { IEvent } from '../types/event';
 import { fetchRecsEvents } from '../utils/fetching-events';
+import LoadingBar from '../utils/ui/Loading';
 
 interface IRecsProps {
   eventUUID: string;
@@ -41,18 +42,7 @@ export default function Recs(props: IRecsProps) {
   }
 
   if (events.length === 0) {
-    return (
-      <Container maxWidth="sm">
-        <Grid
-          container
-          justifyContent="center"
-          alignItems="center"
-          style={{ minHeight: '100vh' }}
-        >
-          <CircularProgress />
-        </Grid>
-      </Container>
-    );
+    return <LoadingBar />;
   }
 
   return (

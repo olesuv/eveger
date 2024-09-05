@@ -12,6 +12,7 @@ import { formatDate } from '../utils/utils';
 import ApiError from '../utils/ui/ApiError';
 import { IEvent } from '../types/event';
 import { fetchRecentEvents } from '../utils/fetching-events';
+import LoadingBar from '../utils/ui/Loading';
 
 export default function RecentEvents() {
   const [events, setEvents] = useState<IEvent[]>([]);
@@ -32,18 +33,7 @@ export default function RecentEvents() {
   }
 
   if (!events) {
-    return (
-      <Container maxWidth="sm">
-        <Grid
-          container
-          justifyContent="center"
-          alignItems="center"
-          style={{ minHeight: '100vh' }}
-        >
-          <CircularProgress />
-        </Grid>
-      </Container>
-    );
+    return <LoadingBar />;
   }
 
   return (
