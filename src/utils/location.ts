@@ -1,5 +1,5 @@
 import { geocode } from 'opencage-api-client';
-import haversine from 'haversine';
+import * as haversine from 'haversine';
 
 export interface LocationCoords {
   longitude: number;
@@ -22,8 +22,8 @@ export default class LocationUtils {
         key: this.openCageApi,
       });
 
-      if (response?.status?.code === 200 && response?.result?.length > 0) {
-        const { lat, lng } = response.results[0].geometry.location;
+      if (response?.status?.code === 200 && response?.results?.length > 0) {
+        const { lat, lng } = response.results[0].geometry;
         return { longitude: lng, latitude: lat };
       }
     } catch (error) {

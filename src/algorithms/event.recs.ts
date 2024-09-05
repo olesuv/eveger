@@ -38,7 +38,7 @@ export default class EventRecs {
 
   private async sortByDestination(events: Event[]) {
     if (!events || events.length === 0) {
-      return Error('No events provided');
+      return Error('no events provided');
     }
 
     const locator = new LocationUtils();
@@ -71,7 +71,8 @@ export default class EventRecs {
       return 'no recommendations for current event';
     }
 
-    return sortedEvents.map((item) => item.event);
+    const recs = sortedEvents.map((item) => item.event);
+    return recs;
   }
 
   public async getRecs() {
