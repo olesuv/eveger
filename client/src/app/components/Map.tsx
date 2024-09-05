@@ -1,20 +1,20 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Container, Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import 'leaflet/dist/leaflet.css';
-import axios from 'axios';
-import { geocode } from 'opencage-api-client';
-import { Event } from '../types/event';
+import { IEvent } from '../types/event';
+import { getCoordinates } from '../utils/location';
+import { fetchEvents } from '../utils/fetching-events';
 
 import L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 
 export default function Map() {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<IEvent[]>([]);
   const [error, setError] = useState('');
   const [mapCenter, setMapCenter] = useState<[number, number]>([51.505, -0.09]);
 
@@ -23,14 +23,22 @@ export default function Map() {
       try {
         const data = await fetchEvents();
 
-        const eventsWithCoordinates = await Promise.all(
-          data.map(async (event) => {
-            const coordinates = await getCoordinates(event.location);
-            return { ...event, location: coordinates };
-          }),
-        );
+        if (data) {
+          const eventsWithCoordinates = await Promise.all(
+            data.map(async (event) => {
+              if (typeof event.location === 'string') {
+                const coordinates = await getCoordinates(event.location);
 
-        setEvents(eventsWithCoordinates);
+                return {
+                  ...event,
+                  location: coordinates || event.location,
+                };
+              }
+              return event;
+            }),
+          );
+          setEvents(eventsWithCoordinates);
+        }
       } catch (err) {
         console.error(err);
         setError('failed to fetch events');
@@ -41,7 +49,8 @@ export default function Map() {
   }, []);
 
   if (error) {
-    return <div>Some API error occurred: {error}</div>;
+    console.error(error);
+    return <div>some API error occurred: {error}</div>;
   }
 
   return (
@@ -49,12 +58,12 @@ export default function Map() {
       <Box sx={{ mt: 4, mb: 4 }}>
         <Paper elevation={3} style={{ height: '500px', width: '100%' }}>
           <Typography variant="h6" style={{ padding: '16px' }}>
-            Map of events
+            Map of all events (even deprecated)
           </Typography>
 
           <MapContainer
             center={mapCenter}
-            zoom={13}
+            zoom={10}
             style={{ height: '100%', width: '100%' }}
           >
             <TileLayer
@@ -64,7 +73,7 @@ export default function Map() {
             {events.map((event, index) => (
               <Marker key={index} position={event.location as [number, number]}>
                 <Popup>
-                  Event with name{' '}
+                  event with title name{' '}
                   <a href={`/events/${event.uuid}`}>'{event.title}'</a>
                 </Popup>
               </Marker>
@@ -74,33 +83,4 @@ export default function Map() {
       </Box>
     </Container>
   );
-}
-
-async function fetchEvents() {
-  return await axios
-    .get(`${process.env.NEXT_PUBLIC_API_LINK}/events`)
-    .then((response) => response.data)
-    .catch((error) => {
-      throw error;
-    });
-}
-
-async function getCoordinates(
-  locationAddress: string,
-): Promise<[number, number] | void> {
-  try {
-    const response = await geocode({
-      q: locationAddress,
-      key: process.env.NEXT_PUBLIC_OPENCAGE_API_KEY,
-    });
-    if (response?.status?.code === 200 && response?.results?.length > 0) {
-      const geocoded = response.results[0] as {
-        geometry: { lat: number; lng: number };
-        formatted: string;
-      };
-      return [geocoded.geometry.lat, geocoded.geometry.lng];
-    }
-  } catch (error) {
-    throw error;
-  }
 }
