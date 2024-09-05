@@ -4,12 +4,10 @@ import RecentEvents from './components/RecentEvents';
 
 export default function Home() {
   return (
-    <>
+    <main>
       <Navbar />
-      <main>
-        <RecentEvents />
-        <Map />
-      </main>
-    </>
+      <RecentEvents />
+      <Map />
+    </main>
   );
 }

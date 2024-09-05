@@ -7,17 +7,16 @@ import Box from '@mui/material/Box';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
 import { geocode } from 'opencage-api-client';
+import { Event } from '../types/event';
 
 import L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 
 export default function Map() {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [error, setError] = useState('');
-  const [mapCenter, setMapCenter] = useState<[number, number]>([
-    37.44186360621624, -122.14479195349563,
-  ]);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([51.505, -0.09]);
 
   useEffect(() => {
     async function loadEvents() {
@@ -63,10 +62,7 @@ export default function Map() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
             {events.map((event, index) => (
-              <Marker
-                key={index}
-                position={event.location as [number, number]} // Ensure this is of the correct type
-              >
+              <Marker key={index} position={event.location as [number, number]}>
                 <Popup>
                   Event with name{' '}
                   <a href={`/events/${event.uuid}`}>'{event.title}'</a>
