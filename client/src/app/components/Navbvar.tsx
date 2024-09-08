@@ -17,8 +17,8 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import NextLink from 'next/link';
 
-const pages = ['Recent events', 'Explore new', 'Create event'];
-const pagesLinks = ['/', '/', '/events/new-event'];
+const pages = ['Recent events', 'Create event'];
+const pagesLinks = ['/', '/events/new-event'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function Navbar() {
